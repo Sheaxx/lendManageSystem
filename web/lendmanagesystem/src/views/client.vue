@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <el-button class="add" icon="el-icon-plus">添加</el-button>
     <el-table class="table" :data="client" stripe :header-cell-style="{textAlign: 'center'}" :cell-style="{ textAlign: 'center' }">
       <el-table-column prop="clientId" label="编号" width="250"></el-table-column>
       <el-table-column prop="clientName" label="姓名" width="250"></el-table-column>
@@ -37,8 +38,16 @@ export default {
 </script>
 
 <style scoped>
-.table {
+#app {
   width: 80%;
+  padding: 0 10%;
+}
+.add {
+  margin: 0 20px 30px 0;
+  float: right;
+}
+.table {
+  width: 100%;
   margin: 0 auto;
   font-size: 18px;
   text-align: center;

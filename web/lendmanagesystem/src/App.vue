@@ -26,7 +26,7 @@ body {
 .option {
   width: 80%;
   display: flex;
-  margin: 90px auto;
+  margin: 90px auto 40px auto;
   padding: 0 10%;
 }
 .option a {

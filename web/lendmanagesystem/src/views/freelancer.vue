@@ -18,16 +18,16 @@
         <el-form ref="form" :model="form" label-width="80px">
           <div class="formTitle">修改自由职业者</div>
           <el-form-item label="姓名">
-            <el-input v-model="form.name"></el-input>
+            <el-input v-model="form.freelancerName"></el-input>
           </el-form-item>
           <el-form-item label="类型">
-            <el-select v-model="form.type" placeholder="请选择类型">
+            <el-select v-model="form.freelancerType" placeholder="请选择类型">
               <el-option label="A" value="A"></el-option>
               <el-option label="B" value="B"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="联系方式">
-            <el-input v-model="form.telNumber"></el-input>
+            <el-input v-model="form.freelancerTelNumber"></el-input>
           </el-form-item>
           <el-form-item class="button">
             <el-button type="primary" @click="saveUpdate">保存</el-button>
@@ -41,16 +41,16 @@
         <el-form ref="form" :model="form" label-width="80px">
           <div class="formTitle">添加自由职业者</div>
           <el-form-item label="姓名">
-            <el-input v-model="form.name"></el-input>
+            <el-input v-model="form.freelancerName"></el-input>
           </el-form-item>
           <el-form-item label="类型">
-            <el-select v-model="form.type" placeholder="请选择类型">
+            <el-select v-model="form.freelancerType" placeholder="请选择类型">
               <el-option label="A" value="A"></el-option>
               <el-option label="B" value="B"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="联系方式">
-            <el-input v-model="form.telNumber"></el-input>
+            <el-input v-model="form.freelancerTelNumber"></el-input>
           </el-form-item>
           <el-form-item class="button">
             <el-button type="primary" @click="saveAdd">添加</el-button>
@@ -70,10 +70,10 @@ export default {
       showAdd:false,
       showUpdate: false,
       form: {
-        id:"",
-        name: "",
-        type: "",
-        telNumber: "",
+        freelancerId:"",
+        freelancerName: "",
+        freelancerType: "",
+        freelancerTelNumber: "",
       },
       freelancer: [
         {
@@ -97,13 +97,18 @@ export default {
       row.index = rowIndex;
     },
     addInfo(){//添加
-      this.form.name = ''
-      this.form.type = ''
-      this.form.telNumber = ''
+      this.form.freelancerName = ''
+      this.form.freelancerType = ''
+      this.form.freelancerTelNumber = ''
       this.showAdd = true
     },
     saveAdd(){//保存添加
-      this.freelancer.push(this.form)
+      var obj = {}
+      obj.freelancerId = this.form.freelancerId
+      obj.freelancerName = this.form.freelancerName
+      obj.freelancerType = this.form.freelancerType
+      obj.freelancerTelNumber = this.form.freelancerTelNumber
+      this.freelancer.push(obj)
       this.showAdd = false
       this.$message({
         message: '添加成功',
@@ -115,15 +120,15 @@ export default {
     },
     updateInfo(row) {//修改
       this.index = row
-      this.form.name = this.freelancer[row].freelancerName;
-      this.form.type = this.freelancer[row].freelancerType;
-      this.form.telNumber = this.freelancer[row].freelancerTelNumber;
+      this.form.freelancerName = this.freelancer[row].freelancerName;
+      this.form.freelancerType = this.freelancer[row].freelancerType;
+      this.form.freelancerTelNumber = this.freelancer[row].freelancerTelNumber;
       this.showUpdate = true;
     },
     saveUpdate() {//保存修改
-      this.freelancer[this.index].freelancerName = this.form.name
-      this.freelancer[this.index].freelancerType = this.form.type
-      this.freelancer[this.index].freelancerTelNumber = this.form.telNumber
+      this.freelancer[this.index].freelancerName = this.form.freelancerName
+      this.freelancer[this.index].freelancerType = this.form.freelancerType
+      this.freelancer[this.index].freelancerTelNumber = this.form.freelancerTelNumber
       this.showUpdate = false
       this.$message({
         message: '修改成功',

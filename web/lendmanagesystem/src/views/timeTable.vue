@@ -14,7 +14,7 @@
         width="250"
       ></el-table-column>
             <el-table-column
-        prop="freelancerId"
+        prop="progressId"
         label="自由职业者编号"
         width="250"
       ></el-table-column>

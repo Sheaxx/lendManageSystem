@@ -4,30 +4,44 @@ import Freelancer from '../views/freelancer.vue'
 import Progress from '../views/progress.vue'
 import Client from '../views/client.vue'
 import TimeTable from '../views/timeTable.vue'
+import Login from '../views/login.vue'
+import Home from '../views/home.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/freelancer',
-    name: 'freelancer',
-    component: Freelancer
+    path: '/login',
+    name: 'login',
+    component: Login
   },
   {
-    path: '/progress',
-    name: 'progress',
-    component: Progress
+    path: '/home',
+    name: 'home',
+    component: Home,
+    children:[
+      {
+        path: '/freelancer',
+        name: 'freelancer',
+        component: Freelancer
+      },
+      {
+        path: '/progress',
+        name: 'progress',
+        component: Progress
+      },
+      {
+        path: '/client',
+        name: 'client',
+        component: Client
+      },
+      {
+        path: '/timeTable',
+        name: 'timeTable',
+        component: TimeTable
+      }
+    ]
   },
-  {
-    path: '/client',
-    name: 'client',
-    component: Client
-  },
-  {
-    path: '/timeTable',
-    name: 'timeTable',
-    component: TimeTable
-  }
 ]
 
 const router = new VueRouter({

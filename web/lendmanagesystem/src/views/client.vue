@@ -1,11 +1,12 @@
 <template>
   <div id="app">
+    <el-button class="excel" icon="el-icon-download" @click="excel">生成日志</el-button>
     <el-button class="add" icon="el-icon-plus" @click="addInfo">添加</el-button>
     <el-table class="table" :data="client" stripe :header-cell-style="{textAlign: 'center'}" :cell-style="{ textAlign: 'center' }" :row-class-name="tableRowClassName">
       <el-table-column prop="clientId" label="编号" width="250"></el-table-column>
       <el-table-column prop="clientName" label="姓名" width="250"></el-table-column>
       <el-table-column prop="clientType" label="类型" width="200"> </el-table-column>
-      <el-table-column prop="clientTelphone" label="联系方式"></el-table-column>
+      <el-table-column prop="clientTelNumber" label="联系方式"></el-table-column>
       <el-table-column label="操作" class="option">
         <div  slot-scope="scope" >
           <a href="" class="update" @click.prevent="updateInfo(scope.$index)">修改</a>
@@ -40,6 +41,9 @@
       <div class="content">
         <el-form ref="form" :model="form" label-width="80px">
           <div class="formTitle">添加客户</div>
+          <el-form-item label="编号">
+            <el-input v-model="form.clientId"></el-input>
+          </el-form-item>
           <el-form-item label="姓名">
             <el-input v-model="form.clientName"></el-input>
           </el-form-item>
@@ -63,6 +67,7 @@
 </template>
 
 <script>
+import XLSX from "xlsx";
 export default {
   data() {
     return {
@@ -77,16 +82,22 @@ export default {
       },
       client: [
         {
-          clientId:"001",
-          clientName:"周子舒",
+          clientId:"0001",
+          clientName:"曹蔚宁",
           clientType:"A",
-          clientTelphone:"13711447629"
+          clientTelNumber:"13766666666"
         },
         {
-          clientId:"001",
-          clientName:"周子舒",
-          clientType:"A",
-          clientTelphone:"13711447629"
+          clientId:"0002",
+          clientName:"顾湘",
+          clientType:"B",
+          clientTelNumber:"13712121212"
+        },
+        {
+          clientId:"0003",
+          clientName:"张成岭",
+          clientType:"B",
+          clientTelNumber:"13734343434"
         },
       ],
     };
@@ -97,6 +108,7 @@ export default {
       row.index = rowIndex;
     },
     addInfo(){//添加
+      this.form.clientId = ''
       this.form.clientName = ''
       this.form.clientType = ''
       this.form.clientTelNumber = ''
@@ -156,6 +168,65 @@ export default {
           });
         });
     },
+    sheet2blob(sheet, sheetName) {
+      sheetName = sheetName || "sheet1";
+      var workbook = {
+        SheetNames: [sheetName],
+        Sheets: {},
+      };
+      workbook.Sheets[sheetName] = sheet;
+      // 生成excel的配置项
+      var wopts = {
+        bookType: "xlsx", // 要生成的文件类型
+        bookSST: false, // 是否生成Shared String Table，官方解释是，如果开启生成速度会下降，但在低版本IOS设备上有更好的兼容性
+        type: "binary",
+      };
+      var wbout = XLSX.write(workbook, wopts);
+      var blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
+      // 字符串转ArrayBuffer
+      function s2ab(s) {
+        var buf = new ArrayBuffer(s.length);
+        var view = new Uint8Array(buf);
+        for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
+        return buf;
+      }
+      return blob;
+    },
+    openDownloadDialog(url, saveName) {
+      if (typeof url == "object" && url instanceof Blob) {
+        url = URL.createObjectURL(url); // 创建blob地址
+      }
+      var aLink = document.createElement("a");
+      aLink.href = url;
+      aLink.download = saveName || ""; // HTML5新增的属性，指定保存文件名，可以不要后缀，注意，file:///模式下不会生效
+      var event;
+      if (window.MouseEvent) event = new MouseEvent("click");
+      else {
+        event = document.createEvent("MouseEvents");
+        event.initMouseEvent(
+          "click",
+          true,
+          false,
+          window,
+          0,
+          0,
+          0,
+          0,
+          0,
+          false,
+          false,
+          false,
+          false,
+          0,
+          null
+        );
+      }
+      aLink.dispatchEvent(event);
+    },
+    excel() {
+      var sheet = XLSX.utils.json_to_sheet(this.client);
+      this.openDownloadDialog(this.sheet2blob(sheet), "客户.xlsx");
+    },
   },
 };
 </script>
@@ -165,7 +236,7 @@ export default {
   width: 80%;
   padding: 0 10%;
 }
-.add {
+.add,.excel {
   margin: 0 20px 30px 0;
   float: right;
 }
@@ -202,6 +273,9 @@ export default {
   margin-top: -200px;
   padding: 30px;
   padding-right: 80px;
+}
+.showAdd .content {
+  height: 340px;
 }
 .formTitle {
   font-size: 20px;

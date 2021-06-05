@@ -20,7 +20,12 @@
         label="姓名"
         width="250"
       ></el-table-column>
-      <el-table-column prop="freelancerType" label="类型" width="200">
+      <el-table-column 
+        prop="freelancerType" 
+        label="类型" 
+        width="200"
+        :filters="[{text: 'A类型', value: 'A'}, {text: 'B类型', value: 'B'}]"
+        :filter-method="filterHandler">
       </el-table-column>
       <el-table-column
         prop="freelancerTelNumber"
@@ -123,6 +128,10 @@ export default {
     tableRowClassName({ row, rowIndex }) {
       // 把每一行的索引放进row
       row.index = rowIndex;
+    },
+    filterHandler(value, row, column) {
+      const property = column['property'];
+      return row[property] === value;
     },
     addInfo() {
       //添加

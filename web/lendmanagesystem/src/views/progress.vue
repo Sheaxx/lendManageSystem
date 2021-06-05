@@ -20,7 +20,12 @@
         label="项目名"
         width="200"
       ></el-table-column>
-      <el-table-column prop="progressType" label="类型" width="150">
+      <el-table-column 
+        prop="progressType" 
+        label="类型" 
+        width="150"
+        :filters="[{text: 'A类型', value: 'A'}, {text: 'B类型', value: 'B'}]"
+        :filter-method="filterHandler">
       </el-table-column>
       <el-table-column prop="progressContent" label="内容"></el-table-column>
       <el-table-column label="操作" class="option" width="200">
@@ -120,6 +125,10 @@ export default {
     tableRowClassName({ row, rowIndex }) {
       // 把每一行的索引放进row
       row.index = rowIndex;
+    },
+    filterHandler(value, row, column) {
+      const property = column['property'];
+      return row[property] === value;
     },
     addInfo(){//添加
       this.progressId = ''

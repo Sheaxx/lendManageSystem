@@ -19,6 +19,8 @@
 export default {
   data() {
     return {
+      userName:'root',
+      password:'123456',
       form:{
         userName:'',
         password:''
@@ -27,7 +29,11 @@ export default {
   },
   methods:{
     login(){
-      this.$router.push('home')
+      if(this.form.userName == this.userName && this.form.password == this.password){
+        this.$router.push('home')
+      }else{
+        this.$message.error('用户名与密码不匹配');
+      }
     }
   }
 }

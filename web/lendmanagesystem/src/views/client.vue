@@ -5,7 +5,12 @@
     <el-table class="table" :data="client" stripe :header-cell-style="{textAlign: 'center'}" :cell-style="{ textAlign: 'center' }" :row-class-name="tableRowClassName">
       <el-table-column prop="clientId" label="编号" width="250"></el-table-column>
       <el-table-column prop="clientName" label="姓名" width="250"></el-table-column>
-      <el-table-column prop="clientType" label="类型" width="200"> </el-table-column>
+      <el-table-column 
+        prop="clientType" 
+        label="类型" width="200"
+        :filters="[{text: 'A类型', value: 'A'}, {text: 'B类型', value: 'B'}]"
+        :filter-method="filterHandler">
+      </el-table-column>
       <el-table-column prop="clientTelNumber" label="联系方式"></el-table-column>
       <el-table-column label="操作" class="option">
         <div  slot-scope="scope" >
@@ -106,6 +111,10 @@ export default {
     tableRowClassName({ row, rowIndex }) {
       // 把每一行的索引放进row
       row.index = rowIndex;
+    },
+    filterHandler(value, row, column) {
+      const property = column['property'];
+      return row[property] === value;
     },
     addInfo(){//添加
       this.form.clientId = ''

@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <el-button class="excel" icon="el-icon-download" @click="excel">生成日志</el-button>
     <el-button class="add" icon="el-icon-plus" @click="addInfo">添加</el-button>
     <el-table
       class="table"
@@ -59,9 +58,6 @@
       <div class="content">
         <el-form ref="form" :model="form" label-width="120px">
           <div class="formTitle">添加自由职业者</div>
-          <el-form-item label="时间表编号">
-            <el-input v-model="form.timeTableId"></el-input>
-          </el-form-item>
           <el-form-item label="自由职业者编号">
             <el-input v-model="form.freelancerId"></el-input>
           </el-form-item>
@@ -82,7 +78,6 @@
 </template>
 
 <script>
-import XLSX from "xlsx";
 export default {
   data() {
     return {
@@ -117,7 +112,6 @@ export default {
       row.index = rowIndex;
     },
     addInfo(){//添加
-      this.timeTableId = ''
       this.form.freelancerId = ''
       this.form.timeTableStartTime = ''
       this.form.timeTableEndTime = ''
@@ -177,65 +171,6 @@ export default {
           });
         });
     },
-    sheet2blob(sheet, sheetName) {
-      sheetName = sheetName || "sheet1";
-      var workbook = {
-        SheetNames: [sheetName],
-        Sheets: {},
-      };
-      workbook.Sheets[sheetName] = sheet;
-      // 生成excel的配置项
-      var wopts = {
-        bookType: "xlsx", // 要生成的文件类型
-        bookSST: false, // 是否生成Shared String Table，官方解释是，如果开启生成速度会下降，但在低版本IOS设备上有更好的兼容性
-        type: "binary",
-      };
-      var wbout = XLSX.write(workbook, wopts);
-      var blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
-      // 字符串转ArrayBuffer
-      function s2ab(s) {
-        var buf = new ArrayBuffer(s.length);
-        var view = new Uint8Array(buf);
-        for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
-        return buf;
-      }
-      return blob;
-    },
-    openDownloadDialog(url, saveName) {
-      if (typeof url == "object" && url instanceof Blob) {
-        url = URL.createObjectURL(url); // 创建blob地址
-      }
-      var aLink = document.createElement("a");
-      aLink.href = url;
-      aLink.download = saveName || ""; // HTML5新增的属性，指定保存文件名，可以不要后缀，注意，file:///模式下不会生效
-      var event;
-      if (window.MouseEvent) event = new MouseEvent("click");
-      else {
-        event = document.createEvent("MouseEvents");
-        event.initMouseEvent(
-          "click",
-          true,
-          false,
-          window,
-          0,
-          0,
-          0,
-          0,
-          0,
-          false,
-          false,
-          false,
-          false,
-          0,
-          null
-        );
-      }
-      aLink.dispatchEvent(event);
-    },
-    excel() {
-      var sheet = XLSX.utils.json_to_sheet(this.timeTable);
-      this.openDownloadDialog(this.sheet2blob(sheet), "自由职业者时间表.xlsx");
-    },
   }
 };
 </script>
@@ -245,7 +180,7 @@ export default {
   width: 80%;
   padding: 0 10%;
 }
-.add,.excel {
+.add {
   margin: 0 20px 30px 0;
   float: right;
 }
@@ -282,9 +217,6 @@ export default {
   margin-top: -200px;
   padding: 30px;
   padding-right: 80px;
-}
-.showAdd .content {
-  height: 340px;
 }
 .formTitle {
   font-size: 20px;
